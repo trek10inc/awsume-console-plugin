@@ -111,7 +111,6 @@ def open_url(config: dict, arguments: argparse.ArgumentParser, url: str):
             url=url,
             profile=arguments.target_profile_name,
         )
-        safe_print('executing command: {}'.format(command))
         subprocess.Popen(shlex.split(command), stdout=open(os.devnull, 'w'))
     else:
         webbrowser.open(url)
