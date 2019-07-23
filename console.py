@@ -40,23 +40,7 @@ def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argp
     if arguments.open_console_link:
         safe_print('Console link')
         arguments.open_console = True
-    if arguments.open_console and not sys.stdin.isatty():
-        try:
-            stdin = sys.stdin.read()
-            credentials = json.loads(stdin)
-            if 'Credentials' in credentials:
-                credentials = credentials['Credentials']
-        except json.JSONDecodeError:
-            safe_print('stdin data is not valid json')
-            exit(1)
-        url = get_console_url(credentials)
-        try:
-            open_url(config, arguments, url)
-        except Exception as e:
-            safe_print('Cannot open browser: {}'.format(e))
-            safe_print('Here is the link: {}'.format(url))
-        exit(0)
-    if arguments.open_console is True and arguments.profile_name is None:
+    if arguments.open_console is True and arguments.profile_name is None and sys.stdin.isatty() and not arguments.json:
         safe_print('Console')
         session = boto3.session.Session()
         creds = session.get_credentials()
