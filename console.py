@@ -50,7 +50,12 @@ def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argp
             safe_print('stdin data is not valid json')
             exit(1)
         url = get_console_url(credentials)
-        open_url(config, arguments, url)
+        try:
+            open_url(config, arguments, url)
+        except Exception as e:
+            safe_print('Cannot open browser: {}'.format(e))
+            safe_print('Here is the link: {}'.format(url))
+        exit(0)
     if arguments.open_console is True and arguments.profile_name is None:
         safe_print('Console')
         session = boto3.session.Session()
@@ -68,6 +73,7 @@ def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argp
             except Exception:
                 safe_print('Cannot open browser: {}'.format(e))
                 safe_print('Here is the link: {}'.format(url))
+        exit(0)
 
 
 @hookimpl
