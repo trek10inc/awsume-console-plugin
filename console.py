@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import sys
 import subprocess
 import shlex
 import urllib
@@ -39,6 +40,17 @@ def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argp
     if arguments.open_console_link:
         safe_print('Console link')
         arguments.open_console = True
+    if arguments.open_console and not sys.stdin.isatty():
+        try:
+            stdin = sys.stdin.read()
+            credentials = json.loads(stdin)
+            if 'Credentials' in credentials:
+                credentials = credentials['Credentials']
+        except json.JSONDecodeError:
+            safe_print('stdin data is not valid json')
+            exit(1)
+        url = get_console_url(credentials)
+        open_url(config, arguments, url)
     if arguments.open_console is True and arguments.profile_name is None:
         safe_print('Console')
         session = boto3.session.Session()
