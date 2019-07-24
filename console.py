@@ -106,9 +106,9 @@ def get_console_url(credentials: dict = None):
 
 
 def open_url(config: dict, arguments: argparse.ArgumentParser, url: str):
-    if config.get('console.browser_command'):
+    if config.get('console', {}).get('browser_command'):
         safe_print('Using a custom browser command')
-        browser_command = config.get('console.browser_command')
+        browser_command = config['console']['browser_command']
         command = browser_command.format(
             url=url,
             profile=arguments.target_profile_name,
