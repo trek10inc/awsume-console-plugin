@@ -5,9 +5,15 @@ verify_ssl = true
 
 [dev-packages]
 pylint = "*"
+twine = "*"
 
 [packages]
 awsume = "*"
 
 [requires]
 python_version = "3.7"
+
+[scripts]
+build = "python setup.py sdist"
+deploy-test = "twine upload dist/*"
+deploy-pypi = "twine upload dist/*"
