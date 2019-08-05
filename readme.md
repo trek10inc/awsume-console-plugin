@@ -4,6 +4,18 @@ _Awsume 4+ only_.
 
 This is a plugin that enables you to use your assumed role credentials to open the AWS console in your default browser.
 
+## Installation
+
+```
+pip install awsume-console-plugin
+```
+
+If you've installed awsume with `pipx`, this will install the console plugin in awsume's virtual environment:
+
+```
+pipx inject awsume awsume-console-plugin
+```
+
 ## Usage
 
 There are two ways to use this plugin.
