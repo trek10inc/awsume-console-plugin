@@ -52,7 +52,9 @@ You can use awsume's configuration to store a custom command (in the `console.br
 
 ### Example
 
-The following will open chrome using a unique profile so that you can open N-number of AWS consoles concurrently
+The following will open chrome using a unique profile so that you can open N-number of AWS consoles concurrently.
+
+_Note you may need to adjust the path and other arguments on your machine._
 
 ```bash
 $ awsume --config set console.browser_command "\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --profile-directory=/tmp/{profile} \"{url}\""

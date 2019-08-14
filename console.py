@@ -39,11 +39,9 @@ def add_arguments(parser: argparse.ArgumentParser):
 @hookimpl
 def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argparse.ArgumentParser):
     if arguments.open_console_link:
-        safe_print('Console link')
         arguments.open_console = True
     if arguments.open_console is True and arguments.profile_name is None and sys.stdin.isatty() and not arguments.json:
         logger.debug('Openning console with current credentials')
-        safe_print('Console')
         session = boto3.session.Session()
         creds = session.get_credentials()
         url = get_console_url({
@@ -66,7 +64,6 @@ def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argp
 def post_get_credentials(config: dict, arguments: argparse.Namespace, profiles: dict, credentials: dict):
     if arguments.open_console:
         logger.debug('Openning console with awsume\'d credentials')
-        safe_print('Open console with awsumed creds!')
         url = get_console_url(credentials)
         logger.debug('URL: {}'.format(url))
         if arguments.open_console_link:
@@ -117,7 +114,6 @@ def get_console_url(credentials: dict = None):
 def open_url(config: dict, arguments: argparse.ArgumentParser, url: str):
     if config.get('console', {}).get('browser_command'):
         logger.debug('Using custom browser command')
-        safe_print('Using a custom browser command')
         browser_command = config['console']['browser_command']
         logger.debug('browser_command: {}'.format(browser_command))
         command = browser_command.format(
