@@ -54,7 +54,7 @@ def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argp
         else:
             try:
                 open_url(config, arguments, url)
-            except Exception:
+            except Exception as e:
                 safe_print('Cannot open browser: {}'.format(e))
                 safe_print('Here is the link: {}'.format(url))
         exit(0)
