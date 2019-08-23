@@ -77,6 +77,8 @@ def post_get_credentials(config: dict, arguments: argparse.Namespace, profiles: 
 
 
 def get_console_url(credentials: dict = None):
+    amazon_domain = 'amazonaws-us-gov' if 'gov' in str(credentials.get('Region')) else 'aws.amazon'
+    logger.debug('Amazon domain: %s', amazon_domain)
     credentials = credentials if credentials is not None else {}
     logger.debug('Credentials: {}'.format(json.dumps(credentials, default=str, indent=2)))
     params = {
@@ -88,7 +90,7 @@ def get_console_url(credentials: dict = None):
         },
     }
     logger.debug('Get console url request params: {}'.format(json.dumps(params, default=str, indent=2)))
-    request_url = 'https://signin.aws.amazon.com/federation?'
+    request_url = 'https://signin.' + amazon_domain + '.com/federation?'
     response = URLOPEN(request_url + URLENCODE(params))
     raw = response.read()
 
@@ -102,11 +104,11 @@ def get_console_url(credentials: dict = None):
     params = {
         'Action': 'login',
         'Issuer': '',
-        'Destination': 'https://console.aws.amazon.com/console/home?region=' + region,
+        'Destination': 'https://console.' + amazon_domain + '.com/console/home?region=' + region,
         'SigninToken': token
     }
     logger.debug('URL params: {}'.format(json.dumps(params, default=str, indent=2)))
-    url = 'https://signin.aws.amazon.com/federation?'
+    url = 'https://signin.' + amazon_domain + '.com/federation?'
     url += URLENCODE(params)
     return url
 
