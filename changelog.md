@@ -3,7 +3,7 @@
 ## [1.1.0] - 2019-09-01 - Console Service Feature
 
 - Adds support for opening the console to a specific service's console
-  - `awsume profile -c cloudformation` will open the cloudformation console
+  - `awsume profile -cs cloudformation` will open the cloudformation console
   - A mapping is maintained for some possible confusing services (like `stepfunctions` will be transformed to `states` by default)
   - A custom mapping can be maintained via the `console.services` configuration property
 - Fixes custom browser command owning the process in some cases
