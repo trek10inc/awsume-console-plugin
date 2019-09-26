@@ -112,7 +112,6 @@ def post_get_credentials(config: dict, arguments: argparse.Namespace, profiles: 
 
     if get_url:
         logger.debug('Openning console with awsume\'d credentials')
-        safe_print(credentials)
         url = get_console_url(credentials, service)
         logger.debug('URL: {}'.format(url))
 
