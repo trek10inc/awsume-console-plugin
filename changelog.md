@@ -1,5 +1,9 @@
 # Awsume Console Plugin Changelog
 
+## [1.1.1] - WIP - Bug Fix
+
+- Fixes handling of region name for using current credentials
+
 ## [1.1.0] - 2019-09-01 - Console Service Feature
 
 - Adds support for opening the console to a specific service's console

@@ -10,6 +10,7 @@ from urllib.parse import urlparse
 import boto3
 from awsume.awsumepy import hookimpl, safe_print
 from awsume.awsumepy.lib.logger import logger
+from awsume.awsumepy.lib import exceptions
 
 # Python 3 compatibility (python 3 has urlencode in parse sub-module)
 URLENCODE = getattr(urllib, 'parse', urllib).urlencode
@@ -81,14 +82,17 @@ def add_arguments(parser: argparse.ArgumentParser):
 def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argparse.ArgumentParser):
     get_url, open_browser, print_url, service = parse_args(arguments, config)
 
-    if get_url is True and arguments.profile_name is None and sys.stdin.isatty() and not arguments.json:
+    if get_url is True and arguments.profile_name is None and arguments.role_arn is None and sys.stdin.isatty() and not arguments.json:
         logger.debug('Openning console with current credentials')
         session = boto3.session.Session()
         creds = session.get_credentials()
+        if not creds:
+            raise exceptions.NoCredentialsError('No credentials to open the console with')
         url = get_console_url({
             'AccessKeyId': creds.access_key,
             'SecretAccessKey': creds.secret_key,
             'SessionToken': creds.token,
+            'Region': session.region_name,
         }, service)
 
         if print_url:
@@ -108,6 +112,7 @@ def post_get_credentials(config: dict, arguments: argparse.Namespace, profiles: 
 
     if get_url:
         logger.debug('Openning console with awsume\'d credentials')
+        safe_print(credentials)
         url = get_console_url(credentials, service)
         logger.debug('URL: {}'.format(url))
 
