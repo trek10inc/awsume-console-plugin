@@ -82,7 +82,6 @@ Some services have urls that are less-than-obvious. For instance, the step funct
 | sfn | states |
 | org | organizations |
 | api | apigateway |
-| api | apigateway |
 | cfnt | cloudfront |
 | cw | cloudwatch |
 | codecommit | codesuite/codecommit |
