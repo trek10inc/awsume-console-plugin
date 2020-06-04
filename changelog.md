@@ -1,7 +1,10 @@
 # Awsume Console Plugin Changelog
 
-## [1.1.1] - WIP - Bug Fix
+## [1.1.1] - Destination URL Templating
 
+- Adds destination url templating
+  - The only value currently templated into destination urls is `region`. So if the region us `us-east-1` and your url is `https://url.com/hello?region={region}`, the url will be templated into `https://url.com/hello?region=us-east-1`
+- Adds `logs` mapping to direct you to the CloudWatch logs console
 - Fixes handling of region name for using current credentials
 
 ## [1.1.0] - 2019-09-01 - Console Service Feature

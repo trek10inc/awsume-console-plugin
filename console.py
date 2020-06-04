@@ -42,6 +42,7 @@ SERVICE_MAPPING = {
     'wat': 'wellarchitected',
     'sso': 'singlesignon',
     'waf': 'wafv2',
+    'logs': 'https://console.aws.amazon.com/cloudwatch/home?region={region}#logsV2:log-groups',
 }
 
 
@@ -67,7 +68,7 @@ def add_arguments(parser: argparse.ArgumentParser):
             metavar='service',
             help='Open the console to a specific service',
         )
-        parser.add_argument('-cls', '-csl', '--console-service-link', '--console-link-service',
+        parser.add_argument('-cls', '-csl',
             action='store',
             default=False,
             dest='console_link_service',
@@ -159,6 +160,14 @@ def is_url(string: str) -> bool:
     return urlparse(string).scheme != ''
 
 
+def templatae_url(url: str, **kwargs) -> str:
+    logger.debug('Templating url with: %s', json.dumps(kwargs, indent=2, default=str))
+    for key, value in kwargs.items():
+        url = url.replace('{%s}' % key, value)
+    logger.debug('Destination url: %s', url)
+    return url
+
+
 def get_console_url(credentials: dict = None, destination: str = None):
     amazon_domain = 'amazonaws-us-gov' if 'gov' in str(credentials.get('Region')) else 'aws.amazon'
     logger.debug('Amazon domain: %s', amazon_domain)
@@ -187,7 +196,7 @@ def get_console_url(credentials: dict = None, destination: str = None):
     params = {
         'Action': 'login',
         'Issuer': '',
-        'Destination': destination if is_url(destination) else 'https://console.' + amazon_domain + '.com/' + destination + '/home?region=' + region,
+        'Destination': templatae_url(destination, region=region) if is_url(destination) else 'https://console.' + amazon_domain + '.com/' + destination + '/home?region=' + region,
         'SigninToken': token
     }
     logger.debug('URL params: {}'.format(json.dumps(params, default=str, indent=2)))
