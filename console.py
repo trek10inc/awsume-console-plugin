@@ -95,7 +95,8 @@ def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argp
             'SessionToken': creds.token,
             'Region': session.region_name,
         }, service)
-
+        if config.get('console', {}).get('ext_container') and os.getenv('AWSUME_PROFILE'):
+            url = 'ext+container:name=%s&url='%os.getenv('AWSUME_PROFILE') + urllib.parse.quote_plus(url)
         if print_url:
             safe_print(url)
         elif open_browser:
@@ -114,6 +115,8 @@ def post_get_credentials(config: dict, arguments: argparse.Namespace, profiles: 
     if get_url:
         logger.debug('Openning console with awsume\'d credentials')
         url = get_console_url(credentials, service)
+        if config.get('console', {}).get('ext_container') and os.getenv('AWSUME_PROFILE'):
+            url = 'ext+container:name=%s&url='%os.getenv('AWSUME_PROFILE') + urllib.parse.quote_plus(url)
         logger.debug('URL: {}'.format(url))
 
         if print_url:
