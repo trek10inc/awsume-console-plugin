@@ -43,6 +43,7 @@ SERVICE_MAPPING = {
     'sso': 'singlesignon',
     'waf': 'wafv2',
     'logs': 'https://console.aws.amazon.com/cloudwatch/home?region={region}#logsV2:log-groups',
+    'logs-insights': 'https://{region}.console.aws.amazon.com/cloudwatch/home?region={region}#logsV2:logs-insights',
 }
 
 

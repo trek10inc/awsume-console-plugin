@@ -1,5 +1,9 @@
 # Awsume Console Plugin Changelog
 
+## [1.1.2] - Alias Addition
+
+- Adds `logs-insights` alias to CloudWatch logs insights
+
 ## [1.1.1] - Destination URL Templating
 
 - Adds destination url templating
