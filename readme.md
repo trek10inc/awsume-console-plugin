@@ -115,7 +115,7 @@ That config will add a mapping from input of `c` to a url of `cloudformation`.
 If you supply a url to the console service modifier, that url will be used as the redirect url. So if you want to view the cloudwatch logs for a lambda in a specific account, you can run:
 
 ```
-awsume <profile> -cs https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logEventViewer:group=/aws/lambda/<my_function>
+awsume <profile> -cs https://console.{amazon_domain}/cloudwatch/home?region={region}#logEventViewer:group=/aws/lambda/<my_function>
 ```
 
 ## Custom Command

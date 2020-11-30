@@ -42,8 +42,8 @@ SERVICE_MAPPING = {
     'wat': 'wellarchitected',
     'sso': 'singlesignon',
     'waf': 'wafv2',
-    'logs': 'https://console.aws.amazon.com/cloudwatch/home?region={region}#logsV2:log-groups',
-    'logs-insights': 'https://{region}.console.aws.amazon.com/cloudwatch/home?region={region}#logsV2:logs-insights',
+    'logs': 'https://console.{amazon_domain}/cloudwatch/home?region={region}#logsV2:log-groups',
+    'logs-insights': 'https://{region}.console.{amazon_domain}/cloudwatch/home?region={region}#logsV2:logs-insights',
 }
 
 
@@ -170,7 +170,15 @@ def templatae_url(url: str, **kwargs) -> str:
 
 
 def get_console_url(credentials: dict = None, destination: str = None):
-    amazon_domain = 'amazonaws-us-gov' if 'gov' in str(credentials.get('Region')) else 'aws.amazon'
+    region = credentials.get('Region') or 'us-east-1'
+    logger.debug('Region: {}'.format(region))
+    if region.startswith('us-gov-'):
+        amazon_domain = 'amazonaws-us-gov.com'
+    elif region.startswith('cn-'):
+        amazon_domain = 'amazonaws.cn'
+    else:
+        amazon_domain = 'aws.amazon.com'
+
     logger.debug('Amazon domain: %s', amazon_domain)
     credentials = credentials if credentials is not None else {}
     logger.debug('Credentials: {}'.format(json.dumps(credentials, default=str, indent=2)))
@@ -183,7 +191,7 @@ def get_console_url(credentials: dict = None, destination: str = None):
         },
     }
     logger.debug('Get console url request params: {}'.format(json.dumps(params, default=str, indent=2)))
-    request_url = 'https://signin.' + amazon_domain + '.com/federation?'
+    request_url = 'https://signin.' + amazon_domain + '/federation?'
     response = URLOPEN(request_url + URLENCODE(params))
     raw = response.read()
 
@@ -192,16 +200,14 @@ def get_console_url(credentials: dict = None, destination: str = None):
     except getattr(json.decoder, 'JSONDecoderError', ValueError):
         token = json.loads(raw.decode())['SigninToken']
     logger.debug('Signin token: {}'.format(token))
-    region = credentials.get('Region') or 'us-east-1'
-    logger.debug('Region: {}'.format(region))
     params = {
         'Action': 'login',
         'Issuer': '',
-        'Destination': templatae_url(destination, region=region) if is_url(destination) else 'https://console.' + amazon_domain + '.com/' + destination + '/home?region=' + region,
-        'SigninToken': token
+        'Destination': templatae_url(destination, region=region, amazon_domain=amazon_domain) if is_url(destination) else 'https://console.' + amazon_domain + '/' + destination + '/home?region=' + region,
+        'SigninToken': token,
     }
     logger.debug('URL params: {}'.format(json.dumps(params, default=str, indent=2)))
-    url = 'https://signin.' + amazon_domain + '.com/federation?'
+    url = 'https://signin.' + amazon_domain + '/federation?'
     url += URLENCODE(params)
     return url
 

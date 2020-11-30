@@ -1,5 +1,9 @@
 # Awsume Console Plugin Changelog
 
+## [1.2.0] - China partition support
+
+- Adds support for credentials for the china partition
+
 ## [1.1.2] - Alias Addition
 
 - Adds `logs-insights` alias to CloudWatch logs insights
