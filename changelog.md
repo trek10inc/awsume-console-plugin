@@ -1,5 +1,9 @@
 # Awsume Console Plugin Changelog
 
+## [1.2.1] - New Alias Additions
+
+- Adds several console link aliases
+
 ## [1.2.0] - China partition support
 
 - Adds support for credentials for the china partition
