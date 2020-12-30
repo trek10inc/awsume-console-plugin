@@ -109,7 +109,7 @@ def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argp
     get_url, open_browser, print_url, service = parse_args(arguments, config)
 
     if get_url is True and arguments.profile_name is None and arguments.role_arn is None and sys.stdin.isatty() and not arguments.json:
-        logger.debug('Openning console with current credentials')
+        logger.debug('Opening console with current credentials')
         session = boto3.session.Session()
         creds = session.get_credentials()
         if not creds:
@@ -137,7 +137,7 @@ def post_get_credentials(config: dict, arguments: argparse.Namespace, profiles: 
     get_url, open_browser, print_url, service = parse_args(arguments, config)
 
     if get_url:
-        logger.debug('Openning console with awsume\'d credentials')
+        logger.debug('Opening console with awsume\'d credentials')
         url = get_console_url(credentials, service)
         logger.debug('URL: {}'.format(url))
 
