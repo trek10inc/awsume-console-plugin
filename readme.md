@@ -141,3 +141,9 @@ The following will open chrome in incognito mode
 ```bash
 $ awsume --config set console.browser_command "\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" -incognito \"{url}\""
 ```
+
+The following will open firefox using a unique temporary profile:
+
+```bash
+$ awsume --config set console.browser_command "/Applications/Firefox.app/Contents/MacOS/firefox -profile /tmp/{profile} -no-remote \"{url}\""
+```
