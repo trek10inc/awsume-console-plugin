@@ -147,3 +147,10 @@ The following will open firefox using a unique temporary profile:
 ```bash
 $ awsume --config set console.browser_command "/Applications/Firefox.app/Contents/MacOS/firefox -profile /tmp/{profile} -no-remote \"{url}\""
 ```
+The following will open chrome and will use your default chrome profile to create the temporary profile used by awsume:
+
+```bash
+$ awsume --config set console.browser_command cp -r "\"/Users/YOUR_USERNAME/Library/Application Support/Google/Chrome/Default/\" \"/tmp/{profile}/Default\"; \"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --user-data-dir=/tmp/{profile} \"{url}\" --no-first-run"
+```
+
+_Note you need to adjust the path to use YOUR_USERNAME_
