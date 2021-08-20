@@ -114,11 +114,12 @@ def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argp
         creds = session.get_credentials()
         if not creds:
             raise exceptions.NoCredentialsError('No credentials to open the console with')
+        region = arguments.region or session.region_name or config.get('region')
         url = get_console_url({
             'AccessKeyId': creds.access_key,
             'SecretAccessKey': creds.secret_key,
             'SessionToken': creds.token,
-            'Region': session.region_name,
+            'Region': region,
         }, service)
 
         if print_url:
