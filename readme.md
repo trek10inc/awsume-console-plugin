@@ -7,7 +7,7 @@ This is a plugin that enables you to use your assumed role credentials to open t
 ## Installation
 
 ```
-pip install awsume-console-plugin
+pip3 install awsume-console-plugin
 ```
 
 If you've installed awsume with `pipx`, this will install the console plugin in awsume's virtual environment:
