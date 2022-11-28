@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='awsume-console-plugin',
-    version='1.2.3',
+    version='1.2.4',
     entry_points={
         'awsume': [
             'console = console'
