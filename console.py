@@ -100,6 +100,12 @@ def add_arguments(parser: argparse.ArgumentParser):
             metavar='service',
             help='Get a sign-on url to a specific service',
         )
+        parser.add_argument('-w', '--without-authentication',
+            action='store_true',
+            default=False,
+            dest='console_without_authentication',
+            help='Open AWS console directly without authentication',
+        )
     except argparse.ArgumentError:
         pass
 
@@ -120,7 +126,7 @@ def post_add_arguments(config: dict, arguments: argparse.Namespace, parser: argp
             'SecretAccessKey': creds.secret_key,
             'SessionToken': creds.token,
             'Region': region,
-        }, service)
+        }, service, arguments.console_without_authentication)
 
         if print_url:
             safe_print(url)
@@ -139,7 +145,7 @@ def post_get_credentials(config: dict, arguments: argparse.Namespace, profiles: 
 
     if get_url:
         logger.debug('Opening console with awsume\'d credentials')
-        url = get_console_url(credentials, service)
+        url = get_console_url(credentials, service, arguments.console_without_authentication)
         logger.debug('URL: {}'.format(url))
 
         if print_url:
@@ -186,7 +192,7 @@ def is_url(string: str) -> bool:
     return urlparse(string).scheme != ''
 
 
-def templatae_url(url: str, **kwargs) -> str:
+def template_url(url: str, **kwargs) -> str:
     logger.debug('Templating url with: %s', json.dumps(kwargs, indent=2, default=str))
     for key, value in kwargs.items():
         url = url.replace('{%s}' % key, value)
@@ -194,7 +200,7 @@ def templatae_url(url: str, **kwargs) -> str:
     return url
 
 
-def get_console_url(credentials: dict = None, destination: str = None):
+def get_console_url(credentials: dict = None, destination: str = None, without_authentication: bool = False):
     region = credentials.get('Region') or 'us-east-1'
     logger.debug('Region: {}'.format(region))
     if region.startswith('us-gov-'):
@@ -203,6 +209,12 @@ def get_console_url(credentials: dict = None, destination: str = None):
         amazon_domain = 'amazonaws.cn'
     else:
         amazon_domain = 'aws.amazon.com'
+
+    target_url = template_url(destination, region=region, amazon_domain=amazon_domain) if is_url(destination) else 'https://console.' + amazon_domain + '/' + destination + '/home?region=' + region
+
+    safe_print(without_authentication)
+    if without_authentication:
+        return target_url
 
     logger.debug('Amazon domain: %s', amazon_domain)
     credentials = credentials if credentials is not None else {}
@@ -228,7 +240,7 @@ def get_console_url(credentials: dict = None, destination: str = None):
     params = {
         'Action': 'login',
         'Issuer': '',
-        'Destination': templatae_url(destination, region=region, amazon_domain=amazon_domain) if is_url(destination) else 'https://console.' + amazon_domain + '/' + destination + '/home?region=' + region,
+        'Destination': target_url,
         'SigninToken': token,
     }
     logger.debug('URL params: {}'.format(json.dumps(params, default=str, indent=2)))
