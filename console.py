@@ -212,7 +212,6 @@ def get_console_url(credentials: dict = None, destination: str = None, without_a
 
     target_url = template_url(destination, region=region, amazon_domain=amazon_domain) if is_url(destination) else 'https://console.' + amazon_domain + '/' + destination + '/home?region=' + region
 
-    safe_print(without_authentication)
     if without_authentication:
         return target_url
 
