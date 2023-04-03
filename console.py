@@ -36,6 +36,7 @@ SERVICE_MAPPING = {
     'codeartifact': 'codesuite/codeartifact',
     'cw': 'cloudwatch',
     'ddb': 'dynamodb',
+    'dms': 'dms/v2',
     'documentdb': 'docdb',
     'eb': 'elasticbeanstalk',
     'ec': 'elasticache',
